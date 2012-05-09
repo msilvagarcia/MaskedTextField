@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MaskedTextField.h"
-#import "CNPJFormatter.h"
+#import "MaskFormatter.h"
 
 @interface ViewController : UIViewController
 

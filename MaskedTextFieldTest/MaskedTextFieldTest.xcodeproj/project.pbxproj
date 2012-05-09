@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74441E0C155AA9B200C3C03D /* MaskFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 74441E0B155AA9B200C3C03D /* MaskFormatter.m */; };
 		7481E93415546E5100718BC6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7481E93315546E5100718BC6 /* UIKit.framework */; };
 		7481E93615546E5100718BC6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7481E93515546E5100718BC6 /* Foundation.framework */; };
 		7481E93815546E5100718BC6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7481E93715546E5100718BC6 /* CoreGraphics.framework */; };
@@ -20,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		74441E0A155AA9B200C3C03D /* MaskFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MaskFormatter.h; path = Formatters/MaskFormatter.h; sourceTree = "<group>"; };
+		74441E0B155AA9B200C3C03D /* MaskFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MaskFormatter.m; path = Formatters/MaskFormatter.m; sourceTree = "<group>"; };
 		7481E92F15546E5100718BC6 /* MaskedTextFieldTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MaskedTextFieldTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7481E93315546E5100718BC6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7481E93515546E5100718BC6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -120,6 +123,8 @@
 			children = (
 				7481E9541554A54F00718BC6 /* CNPJFormatter.h */,
 				7481E9551554A55000718BC6 /* CNPJFormatter.m */,
+				74441E0A155AA9B200C3C03D /* MaskFormatter.h */,
+				74441E0B155AA9B200C3C03D /* MaskFormatter.m */,
 			);
 			name = Formatters;
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 				7481E94715546E5100718BC6 /* ViewController.m in Sources */,
 				7481E9531554713400718BC6 /* MaskedTextField.m in Sources */,
 				7481E9561554A55000718BC6 /* CNPJFormatter.m in Sources */,
+				74441E0C155AA9B200C3C03D /* MaskFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +308,7 @@
 				7481E94F15546E5100718BC6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -24,7 +24,7 @@
 - (MaskedTextField *) mask
 {
     if (_mask == nil) {
-        CNPJFormatter *cnpjFormatter = [[CNPJFormatter alloc] init];
+        MaskFormatter *cnpjFormatter = [[MaskFormatter alloc] initWithMask:@"__.___.___/____-__"];
         _mask = [[MaskedTextField alloc] initWithFormatter:cnpjFormatter];
     }
     return _mask;
