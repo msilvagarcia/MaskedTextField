@@ -16,7 +16,7 @@
 - (NSString *) mask
 {
     if (_mask == nil) {
-        _mask = @"##.###.###/####-##";
+        _mask = @"__.___.___/____-__";
     }
     return _mask;
 }
@@ -25,14 +25,16 @@
 - (NSString *) stringForObjectValue:(NSString *)cleanString
 {
     unichar *stringCharacters = calloc(self.mask.length, sizeof(unichar));
+    int jumpedOverCharacters = 0;
     
     for (int i = 0; i < self.mask.length; i++) {
         @try {
             unichar maskCharacter = [self.mask characterAtIndex:i];
-            unichar stringCharacter = [cleanString characterAtIndex:i];
-            if (maskCharacter == '#' && isnumber(stringCharacter)) {
+            unichar stringCharacter = [cleanString characterAtIndex:i-jumpedOverCharacters];
+            if (maskCharacter == '_' && isnumber(stringCharacter)) {
                 stringCharacters[i] = stringCharacter;
             } else {
+                jumpedOverCharacters++;
                 stringCharacters[i] = maskCharacter;
             }
         }
@@ -43,33 +45,17 @@
     return [[NSString alloc] initWithCharacters:stringCharacters length:self.mask.length];
 }
 
-- (BOOL) getObjectValue:(NSString **)cleanString forString:(NSString *)string errorDescription:(NSString **)error
+- (BOOL) getObjectValue:(NSString **)cleanString forString:(NSString *)rawString errorDescription:(NSString **)error
 {
-    unichar *stringCharacters = calloc(self.mask.length, sizeof(unichar));
-    int jumpedOverCharacters = 0;
-    
-    for (int i = 0; i < self.mask.length; i++) {
-        @try {
-            unichar maskCharacter = [self.mask characterAtIndex:i];
-            unichar stringCharacter = [string characterAtIndex:i];
-            if (maskCharacter == '#' && stringCharacter != '#') {
-                stringCharacters[i-jumpedOverCharacters] = stringCharacter;
-            } else {
-                jumpedOverCharacters++;
-            }
-        }
-        @catch (NSException *exception) {
-            stringCharacters[i-jumpedOverCharacters] = '\0';
-            break;
-        }
-    }
-    
-    for (int i = 0; i < self.mask.length; i++) {
-        NSLog(@"Posição %i = %i", i, stringCharacters[i]);
-    }
     if (cleanString) {
-        *cleanString = [[NSString alloc] initWithCharacters:stringCharacters
-                                                     length:sizeof(stringCharacters)/sizeof(unichar)];
+        *cleanString = [rawString stringByReplacingOccurrencesOfString:@"_"
+                                                            withString:@""];
+        *cleanString = [*cleanString stringByReplacingOccurrencesOfString:@"."
+                                                               withString:@""];
+        *cleanString = [*cleanString stringByReplacingOccurrencesOfString:@"/"
+                                                               withString:@""];
+        *cleanString = [*cleanString stringByReplacingOccurrencesOfString:@"-"
+                                                               withString:@""];
     }
     
     return YES;

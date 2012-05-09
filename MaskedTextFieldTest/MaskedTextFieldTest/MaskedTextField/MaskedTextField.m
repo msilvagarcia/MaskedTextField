@@ -10,41 +10,21 @@
 
 @implementation MaskedTextField
 
-@synthesize mask = _mask;
 @synthesize formatter = _formatter;
 
 #pragma mark - Getters
-- (NSString *) mask
-{
-    return _mask;
-}
-
 - (NSFormatter *) formatter
 {
     return _formatter;
 }
 
 #pragma mark - Setters
-- (void) setMask:(NSString *)mask
-{
-    _mask = mask;
-}
-
 - (void) setFormatter:(NSFormatter *)formatter
 {
     _formatter = formatter;
 }
 
 #pragma mark - Constructors
-- (MaskedTextField *) initWithMask:(NSString *)mask
-{
-    self = [super init];
-    self.mask = mask;
-    self.formatter = [[NSNumberFormatter alloc] init];
-    ((NSNumberFormatter *)self.formatter).positiveFormat = self.mask;
-    return self;
-}
-
 - (MaskedTextField *) initWithFormatter:(NSFormatter *)formatter
 {
     self = [super init];
@@ -55,15 +35,38 @@
 #pragma mark - UITextFieldDelegate methods
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    NSString *text;
-    [self.formatter getObjectValue:&text forString:[textField text] errorDescription:nil];
-    NSLog(@"%@", text);
-    if (text == nil) {
-        text = @"";
+    NSMutableString *text = [[NSMutableString alloc] initWithString:[textField text]];
+
+    if (string != nil) {
+        [text replaceCharactersInRange:range
+                            withString:string];
     }
     
-    text = [self.formatter stringForObjectValue:[text stringByAppendingString:string]];
-    [textField setText:text];
+    [self.formatter getObjectValue:&text
+                         forString:text
+                  errorDescription:nil];
+
+    if (text == nil) {
+        text = [NSMutableString stringWithString:@""];
+    }
+    
+    NSString *newText = [self.formatter stringForObjectValue:text];
+    [textField setText:newText];
+    
+    NSCharacterSet *numbers = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    NSRange lastDigitPosition = [textField.text rangeOfCharacterFromSet:numbers
+                                                                options:NSBackwardsSearch];
+    
+    UITextPosition *textFieldSelectedTextRange;
+    
+    if (lastDigitPosition.location != NSNotFound) {
+        textFieldSelectedTextRange = [textField positionFromPosition:textField.beginningOfDocument offset:lastDigitPosition.location + 1];
+    } else {
+        textFieldSelectedTextRange = [textField positionFromPosition:textField.beginningOfDocument offset:0];
+    }
+    
+    [textField setSelectedTextRange:[textField textRangeFromPosition:textFieldSelectedTextRange toPosition:textFieldSelectedTextRange]];
+    
     return NO;
 }
 

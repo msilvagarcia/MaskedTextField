@@ -10,10 +10,8 @@
 
 @interface MaskedTextField : NSObject  <UITextFieldDelegate>
 
-@property (strong, nonatomic, readonly) NSString *mask;
 @property (strong, nonatomic, readonly) NSFormatter *formatter;
 
-- (MaskedTextField *) initWithMask:(NSString *)mask;
 - (MaskedTextField *) initWithFormatter:(NSFormatter *)formatter;
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
 

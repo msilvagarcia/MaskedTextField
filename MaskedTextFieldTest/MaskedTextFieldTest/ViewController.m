@@ -39,6 +39,7 @@
 {
     [super viewDidLoad];
     [self.textField setDelegate:self.mask];
+    [self.textField becomeFirstResponder];
 }
 
 - (void)viewDidUnload
