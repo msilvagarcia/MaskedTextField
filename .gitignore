@@ -13,3 +13,8 @@ build/*
 xcuserdata
 profile
 *.moved-aside
+.DS_Store
+Library/MaskedTextField/Formatters/.DS_Store
+MaskedTextFieldTest/.DS_Store
+MaskedTextFieldTest/MaskedTextFieldTest/MaskedTextField/.DS_Store
+Library/MaskedTextField/.DS_Store
