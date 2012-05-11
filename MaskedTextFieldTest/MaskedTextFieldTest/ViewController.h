@@ -2,8 +2,8 @@
 //  ViewController.h
 //  MaskedTextFieldTest
 //
-//  Created by Elton Minetto on 5/4/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Marcos Garcia on 5/4/12.
+//  Copyright (c) 2012 Coderockr. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
