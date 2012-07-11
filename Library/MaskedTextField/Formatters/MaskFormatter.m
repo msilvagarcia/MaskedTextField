@@ -2,39 +2,54 @@
 //  MaskFormatter.m
 //  MaskedTextFieldTest
 //
-//  Created by Marcos Garcia on 5/9/12.
-//  Copyright (c) 2012 Coderockr. All rights reserved.
+//  Created by Elton Minetto on 5/9/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import "MaskFormatter.h"
 
 @implementation MaskFormatter
 
+@synthesize masks = _masks;
 @synthesize mask = _mask;
 
 #pragma mark - Constructors
-- (MaskFormatter *) initWithMask:(NSString *)mask
+- (MaskFormatter *) initWithMaskList:(NSArray *)masks
 {
     self = [super init];
-    self.mask = mask;
+    if (self) {
+        self.masks = masks;
+    }
     return self;
 }
 
 #pragma mark - Getters
-- (NSString *) mask
+- (NSArray *) masks
 {
-    if (_mask == nil) {
+    if (_masks == nil) {
         @throw ([NSException exceptionWithName:@"UndefinedMaskException"
                                         reason:@"Mask is undefined"
                                       userInfo:nil]);
     }
-    return _mask;
+    return _masks;
 }
 
 #pragma mark - Setters
-- (void) setMask:(NSString *) mask
+- (void) setMasks:(NSArray *)masks
 {
-    _mask = mask;
+    _masks = masks;
+    self.mask = [_masks objectAtIndex:0];
+}
+
+- (void) updateMaskForText:(NSString *)text
+{
+    text = [text stringByReplacingOccurrencesOfString:@"_" withString:@""];
+    for (NSString *mask in _masks) {
+        if (mask.length >= text.length) {
+            self.mask = mask;
+            break;
+        }
+    }
 }
 
 #pragma mark - NSFormatter overwritten methods
@@ -63,18 +78,55 @@
 
 - (BOOL) getObjectValue:(NSString **)cleanString forString:(NSString *)rawString errorDescription:(NSString **)error
 {
-    if (cleanString) {
-        *cleanString = [rawString stringByReplacingOccurrencesOfString:@"_"
-                                                            withString:@""];
-        *cleanString = [*cleanString stringByReplacingOccurrencesOfString:@"."
-                                                               withString:@""];
-        *cleanString = [*cleanString stringByReplacingOccurrencesOfString:@"/"
-                                                               withString:@""];
-        *cleanString = [*cleanString stringByReplacingOccurrencesOfString:@"-"
-                                                               withString:@""];
+    NSError *regexError = nil;
+    NSRegularExpression *documentRegex = [NSRegularExpression regularExpressionWithPattern:@"[^0-9]" options:0 error:&regexError];
+
+    if (regexError != nil) {
+        *error = regexError.localizedDescription;
+        return NO;
     }
     
+    *cleanString = [documentRegex stringByReplacingMatchesInString:rawString options:0 range:NSMakeRange(0, rawString.length) withTemplate:@""];
+
     return YES;
+}
+
+#pragma mark - Human readable methods
+- (NSString *) unmaskedStringForMaskedString:(NSString *)maskedString
+{
+    NSString *unmaskedString = nil;
+    NSString *error = nil;
+    
+    [self getObjectValue:&unmaskedString forString:maskedString errorDescription:&error];
+    if (error != nil) {
+        NSLog(@"Error: %@", error);
+    }
+    
+    return unmaskedString;
+}
+
+- (NSString *) maskedStringForUnmaskedString:(NSString *)unmaskedString
+{
+    return [self stringForObjectValue:unmaskedString];
+}
+
+- (NSString *) maskedStringWithoutEmptyCharactersForUnmaskedString:(NSString *)unmaskedString
+{
+    NSMutableString *maskedString = [NSMutableString stringWithString:[self stringForObjectValue:unmaskedString]];
+    
+    NSCharacterSet *numbers = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    NSRange exclusionRange = [maskedString rangeOfCharacterFromSet:numbers
+                                                           options:NSBackwardsSearch];
+    if (exclusionRange.location == NSNotFound) {
+        return @"";
+    }
+    
+    exclusionRange.location++;
+    exclusionRange.length = maskedString.length - exclusionRange.location;
+  
+    [maskedString replaceCharactersInRange:exclusionRange withString:@""];
+
+    return maskedString;
 }
 
 @end
