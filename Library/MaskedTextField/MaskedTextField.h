@@ -7,12 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MaskFormatter.h"
 
 @interface MaskedTextField : NSObject  <UITextFieldDelegate>
 
-@property (strong, nonatomic, readonly) NSFormatter *formatter;
+@property (strong, nonatomic, readonly) MaskFormatter *formatter;
+@property BOOL textFieldShouldReturn;
+@property (unsafe_unretained, nonatomic) id <UITextFieldDelegate> textFieldDelegate;
 
 - (MaskedTextField *) initWithFormatter:(NSFormatter *)formatter;
-- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
 
 @end
